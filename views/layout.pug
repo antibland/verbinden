@@ -7,7 +7,23 @@ html
     block content
     script(src="/socket.io/socket.io.js")
     script.
+      var form = document.getElementById('my-form');
       var socket = io('//localhost:3000');
+
       socket.on('socketToMe', function (data) {
         console.log(data);
+      });
+
+      form.addEventListener('submit', function(e) {
+        fetch('//localhost:3000', {
+          method: 'post',
+          headers: new Headers({
+            'Content-Type': 'application/json'
+          }),
+          body: JSON.stringify({
+            message: document.getElementById('m').value
+          })
+        });
+
+        e.preventDefault();
       });
