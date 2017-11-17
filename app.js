@@ -95,7 +95,7 @@ io.on('connection', function(socket) {
 
       send({}, function (err, res) {
         if (err) throw error;
-        io.emit('chat message', 'Thanks for reaching out. I\'ll be right with you.');
+        io.emit('chat message', 'Thanks for reaching out. I\'ll respond to you shortly.');
       });
     } else {
       io.to(app.locals.admin_id).emit('chat message', data.message);
