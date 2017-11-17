@@ -12,6 +12,12 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+if (app.get('env') === 'development') {
+  require('dotenv').config()
+} else {
+
+}
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -35,6 +41,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 
+app.get('/chat', function(req, res) {
+  const id = req.query.id;
+  res.render('chat', { title: 'Site chat', id });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -54,15 +64,45 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-io.on('connection', function(socket){
-  console.log('a user connected with id: ' + socket.id);
+app.locals.uri = '';
+app.locals.current_clients = [];
+app.locals.admin_id = '';
 
+io.on('connection', function(socket) {
   io.clients((error, clients) => {
     if (error) throw error;
     console.log('total connected', clients.length, '\ncurrent clients', clients);
   });
 
-  socket.on('disconnect', function(){
+  socket.on('admin message', data => {
+    app.locals.admin_id = data.admin_id;
+    io.to(data.user_id).emit('chat message', data.message);
+  });
+
+  socket.on('chat message', data => {
+    if (!app.locals.current_clients.includes(data.id)) {
+      app.locals.current_clients.push(data.id);
+
+      var send = require('gmail-send')({
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+          to:   process.env.EMAIL_USER,
+          subject: 'Chat started from website!',
+          html:    `<h2>${data.message}<h2>
+                    <br><br>
+                    <a href="${app.locals.uri}/chat?id=${data.id}">Join the chat</a>`
+        });
+
+      send({}, function (err, res) {
+        if (err) throw error;
+        io.emit('chat message', 'Thanks for reaching out. I\'ll be right with you.');
+      });
+    } else {
+      io.to(app.locals.admin_id).emit('chat message', data.message);
+    }
+  });
+
+  socket.on('disconnect', () => {
     console.log('user ' + socket.id + ' disconnected');
   });
 });

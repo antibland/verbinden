@@ -8,22 +8,58 @@ html
     script(src="/socket.io/socket.io.js")
     script.
       var form = document.getElementById('my-form');
-      var socket = io('//localhost:3000');
+      var admin_form = document.getElementById('my-admin-form');
+      var id_from_params = new URLSearchParams(window.location.search).get('id');
+      var uri = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
 
-      socket.on('socketToMe', function (data) {
-        console.log(data);
+      //var socket = io('//localhost:3000');
+      var socket = io(uri);
+      var session_id;
+      var admin_session_id;
+      var list = document.getElementsByClassName('messages')[0];
+
+      var addToList = function addToList(message, source) {
+        var item = document.createElement('li');
+        var txt = document.createTextNode(message);
+        item.classList.add(source);
+        item.appendChild(txt);
+        list.appendChild(item);
+      }
+
+      socket.on('connect', function() {
+        session_id = socket.id
       });
 
-      form.addEventListener('submit', function(e) {
-        fetch('//localhost:3000', {
-          method: 'post',
-          headers: new Headers({
-            'Content-Type': 'application/json'
-          }),
-          body: JSON.stringify({
-            message: document.getElementById('m').value
-          })
+      socket.on('chat message', function(message) {
+        addToList(message, 'them');
+      });
+
+      if (admin_form) {
+        admin_form.addEventListener('submit', function(e) {
+          socket.emit('admin message', {
+            message: message.value,
+            user_id: id_from_params,
+            admin_id: session_id,
+          });
+
+          addToList(message.value, 'me');
+          message.value = '';
+
+          e.preventDefault();
         });
+      }
+
+
+      form.addEventListener('submit', function(e) {
+        var message = document.getElementById('message');
+
+        socket.emit('chat message', {
+          message: message.value,
+          id: session_id
+        });
+
+        addToList(message.value, 'me');
+        message.value = '';
 
         e.preventDefault();
       });
