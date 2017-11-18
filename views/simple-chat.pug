@@ -16,7 +16,7 @@ input(type="checkbox" id="toggle-chat")
 
   if id
     form(action='' id='my-admin-form' method='POST')
-      input(name='message' id='message' aria-label='Enter message.' placeholder='Message…' required)
+      input(name='message' autocomplete="off" id='message' aria-label='Enter message.' placeholder='Message…' required)
   else
     form(action='' id='my-form' method='POST')
-      input(name='message' id='message' aria-label='Enter message.' placeholder='Message…' required)
+      input(name='message' autocomplete="off" id='message' aria-label='Enter message.' placeholder='Message…' required)

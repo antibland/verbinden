@@ -172,7 +172,10 @@ footer {
 }
 
 .chat-body {
+  padding: 1em 0.5em;
   flex-grow: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .chat-module h1 {
@@ -193,11 +196,63 @@ footer {
   cursor: pointer;
 }
 
-.messages { margin: 0; padding: 0 0 4em; flex: 1; }
+.chat-bubble label {
+  cursor: pointer;
+}
+
+/* .messages { margin: 0; padding: 0 0 4em; flex: 1; }
 .messages li { padding: 5px 10px; }
 .messages li.me {
   background-color: lightgray;
+} */
+
+.entry {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  max-width: 100%;
+  margin-bottom: 0.5em;
 }
+
+.entry.theirs {
+  flex-direction: row-reverse;
+}
+
+.entry p {
+  position: relative;
+  background-color: #ddd;
+  padding: 0.5em;
+  margin: 0 1em;
+  border-radius: 4px;
+  font-weight: lighter;
+  max-width: 70%;
+}
+
+.entry p:before {
+  position: absolute;
+  right: auto;
+  bottom: .6em;
+  left: -12px;
+  height: 0;
+  content: '';
+  border: 6px solid transparent;
+  border-right-color: #ddd;
+  z-index: 2;
+}
+
+.entry.theirs p {
+  background: #08f;
+  color: white;
+}
+
+.entry.theirs p:before {
+  right: -12px;
+  bottom: .6em;
+  left: auto;
+  border: 6px solid transparent;
+  border-left-color: #08f;
+}
+
 
 @keyframes hover {
   from {

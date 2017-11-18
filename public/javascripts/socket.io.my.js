@@ -19,11 +19,14 @@ var utils = {
   },
 
   addToList: function addToList(source, message) {
-    var message = source === 'them' ? message : utils.getMessage();
+    var message = source === 'theirs' ? message : utils.getMessage();
     var item = document.createElement('li');
+    var txt_wrap = document.createElement('p');
     var txt = document.createTextNode(message);
+    txt_wrap.appendChild(txt);
     item.classList.add(source);
-    item.appendChild(txt);
+    item.classList.add('entry');
+    item.appendChild(txt_wrap);
     list.appendChild(item);
   },
 
@@ -47,13 +50,13 @@ socket.on('connect', function() {
 });
 
 socket.on('chat message', function(message) {
-  utils.addToList('them', message);
+  utils.addToList('theirs', message);
 });
 
 message_form.addEventListener('submit', function(e) {
   var message_options = utils.createMessageOptions();
   socket.emit(message_type, message_options);
-  utils.addToList('me');
+  utils.addToList('mine');
   utils.clearInput();
   e.preventDefault();
 });
