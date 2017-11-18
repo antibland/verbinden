@@ -5,8 +5,9 @@ var io = require('socket.io')(http);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  req.app.locals.uri = req.protocol + '://' + req.get('host')
-  res.render('index', { title: 'Express' });
+  const uri = req.protocol + '://' + req.get('host');
+  req.app.locals.uri = uri
+  res.render('index', { title: '' });
 });
 
 module.exports = router;

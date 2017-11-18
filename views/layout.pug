@@ -4,8 +4,11 @@ html
     title= title
     meta(charset='UTF-8')
     meta(name='viewport', content='user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width')
+    link(href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet")
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
-    script(src='/socket.io/socket.io.js')
-    script(src='/javascripts/socket.io.my.js')
+    include header
+    main
+      block content
+    include simple-chat
+    include footer
