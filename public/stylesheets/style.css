@@ -66,7 +66,6 @@ li {
 }
 
 body > header .inner {
-  max-width: 1200px;
   padding: 1em 100px;
   display: flex;
   justify-content: space-between;
@@ -292,7 +291,7 @@ footer {
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 600px) {
   body > header .inner {
     padding: 1em 20px;
   }
