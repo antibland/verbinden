@@ -8,6 +8,7 @@ var socket = io(uri);
 var session_id;
 var admin_session_id;
 var list = document.getElementsByClassName('messages')[0];
+var typing_timeout;
 
 var utils = {
   clearInput: function clearInput() {
@@ -51,6 +52,24 @@ socket.on('connect', function() {
 
 socket.on('chat message', function(message) {
   utils.addToList('theirs', message);
+});
+
+socket.on('typing', function() {
+  document.body.classList.add('typing');
+});
+
+socket.on('stopped typing', function() {
+  document.body.classList.remove('typing');
+});
+
+document.getElementById('message').addEventListener('keydown', function() {
+  clearTimeout(typing_timeout);
+  var user_type = admin_form ? 'admin' : 'client';
+  socket.emit('typing', { user_type: user_type, user_id: id_from_params });
+
+  typing_timeout = setTimeout(function() {
+    socket.emit('stopped typing', { user_type: user_type, user_id: id_from_params })
+  }, 3000);
 });
 
 message_form.addEventListener('submit', function(e) {

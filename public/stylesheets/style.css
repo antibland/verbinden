@@ -165,10 +165,24 @@ footer {
   padding: 1.25em 1.75em;
 }
 
-.chat-module header img {
+.chat-module-avatar {
   border-radius: 50%;
   margin-right: 10px;
   filter: brightness(1.2);
+  background-color: #fff;
+}
+
+.typing .chat-module header::after {
+  content: '';
+  background-color: #c62641;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  position: absolute;
+  left: 61px;
+  top: 19px;
+  animation: .6s ease-in-out infinite alternate toggleFade;
 }
 
 .chat-body {
@@ -199,12 +213,6 @@ footer {
 .chat-bubble label {
   cursor: pointer;
 }
-
-/* .messages { margin: 0; padding: 0 0 4em; flex: 1; }
-.messages li { padding: 5px 10px; }
-.messages li.me {
-  background-color: lightgray;
-} */
 
 .entry {
   display: flex;
@@ -261,6 +269,16 @@ footer {
 
   to {
     transform: translateY(-20px)
+  }
+}
+
+@keyframes toggleFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 

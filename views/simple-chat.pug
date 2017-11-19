@@ -7,16 +7,11 @@ input(type="checkbox" id="toggle-chat")
 
 .chat-module
   header
-    unless id
-      img(src='/images/me.jpeg' width='50' height='50' alt='Avatar of Andy Hoffman.')
-      h1 Talking to Andy
+    img.chat-module-avatar(src=id ? '/images/user_avatar.png' : '/images/me.jpeg' width='50' height='50' alt='Default avatar image.')
+    h1 Chatting with #{id ? 'User' : 'Andy'}
 
   .chat-body
     ul.messages
 
-  if id
-    form(action='' id='my-admin-form' method='POST')
-      input(name='message' autocomplete="off" id='message' aria-label='Enter message.' placeholder='Message…' required)
-  else
-    form(action='' id='my-form' method='POST')
-      input(name='message' autocomplete="off" id='message' aria-label='Enter message.' placeholder='Message…' required)
+  form(action='' id=id ? 'my-admin-form' : 'my-form' method='POST')
+    input(name='message' autocomplete="off" id='message' aria-label='Enter message.' placeholder='Message…' required)
