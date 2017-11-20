@@ -93,6 +93,7 @@ io.on('connection', function(socket) {
 
   socket.on('admin message', data => {
     io.to(data.user_id).emit('chat message', data.message);
+    io.to(data.user_id).emit('play notification', '');
   });
 
   socket.on('chat message', data => {
@@ -117,6 +118,7 @@ io.on('connection', function(socket) {
       });
     } else {
       io.to(app.locals.chat_hash[data.id]).emit('chat message', data.message);
+      io.to(app.locals.chat_hash[data.id]).emit('play notification', '');
     }
   });
 

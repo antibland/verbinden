@@ -17,15 +17,6 @@ form input:valid {
   background-color: white;
 }
 
-input[type=checkbox] {
-  display: none;
-}
-
-input[type=checkbox]:checked ~ .chat-module {
-  transform: translateX(0);
-  opacity: 1;
-}
-
 input::placeholder {
   color: rgba(211, 211, 211, 0.8);
 }
@@ -156,6 +147,12 @@ footer {
   transform: translateX(500px);
   opacity: 0;
   transition: 0.5s transform, 0.5s opacity;
+  max-height: 70vh;
+}
+
+.chat-bubble.active + .chat-module {
+  transform: translateX(0);
+  opacity: 1;
 }
 
 .chat-module header {
@@ -207,10 +204,6 @@ footer {
   bottom: 2em;
   right: 2em;
   animation: 2s ease-in-out infinite alternate hover;
-  cursor: pointer;
-}
-
-.chat-bubble label {
   cursor: pointer;
 }
 

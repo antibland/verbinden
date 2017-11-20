@@ -1,9 +1,6 @@
-button.chat-bubble
-  label(for="toggle-chat")
-    svg.icon(aria-hidden='true')
-      use(xlink:href='svg-defs.svg#svg-speech-bubble')
-
-input(type="checkbox" id="toggle-chat")
+button.chat-bubble#chat-bubble
+  svg.icon(aria-hidden='true')
+    use(xlink:href='svg-defs.svg#svg-speech-bubble')
 
 .chat-module
   header
@@ -14,4 +11,15 @@ input(type="checkbox" id="toggle-chat")
     ul.messages
 
   form(action='' id=id ? 'my-admin-form' : 'my-form' method='POST')
-    input(name='message' autocomplete="off" id='message' aria-label='Enter message.' placeholder='Message…' required)
+    input(name='message' autocomplete='off' id='message' aria-label='Enter message.' placeholder='Message…' required)
+
+audio(src="/click_sound.wav" id="click_sound" autostart="false")
+
+script.
+  (function() {
+    document
+      .getElementById('chat-bubble')
+      .addEventListener('click', function() {
+        this.classList.toggle('active');
+      })
+  })()

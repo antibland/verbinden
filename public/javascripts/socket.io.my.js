@@ -63,6 +63,10 @@ socket.on('stopped typing', function() {
   document.body.classList.remove('typing');
 });
 
+socket.on('play notification', function() {
+  document.getElementById('click_sound').play();
+});
+
 document.getElementById('message').addEventListener('keydown', function(e) {
   clearTimeout(typing_timeout);
   var user_type = admin_form ? 'admin' : 'client';
@@ -79,7 +83,7 @@ document.getElementById('message').addEventListener('keydown', function(e) {
 
   typing_timeout = setTimeout(function() {
     socket.emit('stopped typing', data);
-  }, 3000);
+  }, 2000);
 });
 
 message_form.addEventListener('submit', function(e) {
