@@ -32,19 +32,20 @@ var utils = {
   },
 
   createMessageOptions: function createMessageOptions() {
-    return admin_form ? { message: utils.getMessage(),
+    var message = utils.getMessage();
+    return admin_form ? { message: message,
                           user_id: id_from_params,
                           admin_id: session_id }
                       : {
-                          message: utils.getMessage(),
+                          message: message,
                           id: session_id
                         };
   }
 };
 
 // message related data
-var message_form    = admin_form ? admin_form : form;
-var message_type    = admin_form ? 'admin message' : 'chat message';
+var message_form = admin_form ? admin_form : form;
+var message_type = admin_form ? 'admin message' : 'chat message';
 
 socket.on('connect', function() {
   session_id = socket.id
@@ -62,13 +63,22 @@ socket.on('stopped typing', function() {
   document.body.classList.remove('typing');
 });
 
-document.getElementById('message').addEventListener('keydown', function() {
+document.getElementById('message').addEventListener('keydown', function(e) {
   clearTimeout(typing_timeout);
   var user_type = admin_form ? 'admin' : 'client';
-  socket.emit('typing', { user_type: user_type, user_id: id_from_params });
+  var data = { user_type: user_type };
+
+  if (user_type === 'admin') {
+    data['user_id'] = id_from_params;
+    data['admin_id'] = session_id;
+  } else if (user_type === 'client') {
+    data['user_id'] = session_id;
+  }
+
+  socket.emit('typing', data);
 
   typing_timeout = setTimeout(function() {
-    socket.emit('stopped typing', { user_type: user_type, user_id: id_from_params })
+    socket.emit('stopped typing', data);
   }, 3000);
 });
 

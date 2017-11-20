@@ -66,7 +66,7 @@ app.use(function(err, req, res, next) {
 
 app.locals.uri = '';
 app.locals.current_clients = [];
-app.locals.admin_id = '';
+app.locals.chat_hash = {};
 
 io.on('connection', function(socket) {
   io.clients((error, clients) => {
@@ -78,26 +78,28 @@ io.on('connection', function(socket) {
     if (data.user_type === 'admin') {
       io.to(data.user_id).emit('stopped typing', '');
     } else {
-      io.to(app.locals.admin_id).emit('stopped typing', '');
+      io.to(app.locals.chat_hash[data.user_id]).emit('stopped typing', '');
     }
   });
 
   socket.on('typing', data => {
     if (data.user_type === 'admin') {
+      app.locals.chat_hash[data.user_id] = data.admin_id;
       io.to(data.user_id).emit('typing', '');
     } else {
-      io.to(app.locals.admin_id).emit('typing', '');
+      io.to(app.locals.chat_hash[data.user_id]).emit('typing', '');
     }
   });
 
   socket.on('admin message', data => {
-    app.locals.admin_id = data.admin_id;
     io.to(data.user_id).emit('chat message', data.message);
   });
 
   socket.on('chat message', data => {
     if (!app.locals.current_clients.includes(data.id)) {
       app.locals.current_clients.push(data.id);
+      // add hash key
+      app.locals.chat_hash[data.id] = '';
 
       var send = require('gmail-send')({
           user: process.env.EMAIL_USER,
@@ -114,7 +116,7 @@ io.on('connection', function(socket) {
         io.to(data.id).emit('chat message', 'Thanks for reaching out. I\'ll respond to you shortly.');
       });
     } else {
-      io.to(app.locals.admin_id).emit('chat message', data.message);
+      io.to(app.locals.chat_hash[data.id]).emit('chat message', data.message);
     }
   });
 
