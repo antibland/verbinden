@@ -207,6 +207,10 @@ footer {
   cursor: pointer;
 }
 
+.chat-bubble:active {
+  color: black;
+}
+
 .entry {
   display: flex;
   flex-direction: row;
