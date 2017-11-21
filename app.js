@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 var server = require('http').Server(app);
@@ -14,8 +13,6 @@ var io = require('socket.io')(server);
 
 if (app.get('env') === 'development') {
   require('dotenv').config()
-} else {
-
 }
 
 // view engine setup
@@ -39,7 +36,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
 
 app.get('/chat', function(req, res) {
   const id = req.query.id;
@@ -123,7 +119,16 @@ io.on('connection', function(socket) {
   });
 
   socket.on('disconnect', () => {
-    console.log('user ' + socket.id + ' disconnected');
+    var socket_id = socket.id;
+
+    for (let key in app.locals.chat_hash) {
+      if (key === socket_id || app.locals.chat_hash[key] === socket_id) {
+        io.to(app.locals.chat_hash[key]).emit('disconnect', '');
+        io.to(key).emit('disconnect', '');
+        delete app.locals.chat_hash[key];
+        break;
+      }
+    }
   });
 });
 

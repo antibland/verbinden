@@ -20,7 +20,6 @@ var utils = {
   },
 
   addToList: function addToList(source, message) {
-    var message = source === 'theirs' ? message : utils.getMessage();
     var item = document.createElement('li');
     var txt_wrap = document.createElement('p');
     var txt = document.createTextNode(message);
@@ -49,6 +48,12 @@ var message_type = admin_form ? 'admin message' : 'chat message';
 
 socket.on('connect', function() {
   session_id = socket.id
+});
+
+socket.on('disconnect', function() {
+  document.body.classList.remove('typing');
+  document.body.classList.add('disconnect');
+  utils.addToList('system', 'Chat disconnected');
 });
 
 socket.on('chat message', function(message) {
@@ -89,7 +94,7 @@ document.getElementById('message').addEventListener('keydown', function(e) {
 message_form.addEventListener('submit', function(e) {
   var message_options = utils.createMessageOptions();
   socket.emit(message_type, message_options);
-  utils.addToList('mine');
+  utils.addToList('mine', utils.getMessage());
   utils.clearInput();
   e.preventDefault();
 });
