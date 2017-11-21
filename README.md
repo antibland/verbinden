@@ -13,9 +13,10 @@ You open the email and click the link to join the chat, and a window opens conta
 
 ## Features
 
-* Multiple, simultaneous sessions
-* Indicator to see when the user is typing
-* Users hear 'click' sound when receiving messages
+* Multiple, simultaneous chats
+* Indicator showing when connected user is typing
+* Audio notification when receiving messages
+* Disconnected chat notification
 
 ## Installation
 
@@ -34,6 +35,7 @@ I'm using the [gmail-send](https://www.npmjs.com/package/gmail-send) package to 
 ```
 EMAIL_USER=some_email@gmail.com
 EMAIL_PASS=mmffeeghuzeegh
+SITE_OWNER=Your name
 ```
 
 `.env` file extensions are in the `.gitignore`, so that your credentials will never be uploaded and shared.

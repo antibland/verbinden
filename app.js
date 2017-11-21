@@ -63,6 +63,7 @@ app.use(function(err, req, res, next) {
 app.locals.uri = '';
 app.locals.current_clients = [];
 app.locals.chat_hash = {};
+app.locals.site_owner = process.env.SITE_OWNER;
 
 io.on('connection', function(socket) {
   io.clients((error, clients) => {
