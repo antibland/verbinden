@@ -28,7 +28,7 @@ $ npm i
 I'm using the [gmail-send](https://www.npmjs.com/package/gmail-send) package to send email. For this to work, you'll need:
 
 * A gmail address
-* An application-specific password ([instructions](Sign in using App Passwords - Google Account Help - Google Support))
+* An application-specific password ([instructions](https://support.google.com/accounts/answer/185833?hl=en))
 * A `.env` file which you'll manually create in the root directory, containing your gmail email address and application-specific password. It would look something like this:
 
 ```
