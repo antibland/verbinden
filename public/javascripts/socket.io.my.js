@@ -2,13 +2,26 @@
 
 var form = document.getElementById('my-form');
 var admin_form = document.getElementById('my-admin-form');
-var id_from_params = new URLSearchParams(window.location.search).get('id');
+var id_from_params;
 var uri = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
 var socket = io(uri);
 var session_id;
 var admin_session_id;
 var list = document.getElementsByClassName('messages')[0];
 var typing_timeout;
+
+if ("URLSearchParams" in window) {
+  id_from_params = new URLSearchParams(window.location.search).get('id');
+} else {
+  window.URLSearchParams = function(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  };
+
+  id_from_params = window.URLSearchParams('id');
+}
 
 var utils = {
   clearInput: function clearInput() {
