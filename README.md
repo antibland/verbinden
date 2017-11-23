@@ -49,3 +49,10 @@ $ npm start
 Head over to `http://localhost:3000/` and you should see the start page.
 
 ![alt_text](https://i.imgur.com/GGlUh8R.png)
+
+## Support
+
+* IE10+
+* Safari
+* Chrome
+* Firefox
