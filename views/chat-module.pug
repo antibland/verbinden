@@ -14,12 +14,3 @@ button.chat-bubble#chat-bubble
     input(name='message' autocomplete='off' id='message' aria-label='Enter message.' placeholder='Message…' required)
 
 audio(src="/click_sound.wav" id="click_sound" autostart="false")
-
-script.
-  (function() {
-    document
-      .getElementById('chat-bubble')
-      .addEventListener('click', function() {
-        this.classList.toggle('active');
-      })
-  })()

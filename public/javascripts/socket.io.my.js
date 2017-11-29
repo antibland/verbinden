@@ -24,6 +24,10 @@ if ("URLSearchParams" in window) {
 }
 
 var utils = {
+  blurInput: function blurInput() {
+    document.getElementById('message').blur();
+  },
+
   clearInput: function clearInput() {
     document.getElementById('message').value = '';
   },
@@ -67,6 +71,7 @@ socket.on('disconnect', function() {
   document.body.classList.remove('typing');
   document.body.classList.add('disconnect');
   utils.addToList('system', 'Chat disconnected');
+  utils.blurInput();
 });
 
 socket.on('chat message', function(message) {
@@ -111,3 +116,20 @@ message_form.addEventListener('submit', function(e) {
   utils.clearInput();
   e.preventDefault();
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+  document
+  .getElementById('chat-bubble')
+  .addEventListener('click', function() {
+    this.classList.toggle('active');
+
+    if (this.classList.contains('active') && !document.body.classList.contains('disconnect')) {
+      document.getElementById('message').focus();
+    }
+  });
+
+  if (admin_form) {
+    document.getElementById('chat-bubble').classList.add('active');
+    document.getElementById('message').focus();
+  }
+})

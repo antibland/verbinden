@@ -68,7 +68,7 @@ app.locals.site_owner = process.env.SITE_OWNER;
 io.on('connection', function(socket) {
   io.clients((error, clients) => {
     if (error) throw error;
-    console.log('total connected', clients.length, '\ncurrent clients', clients);
+    //console.log('total connected', clients.length, '\ncurrent clients', clients);
   });
 
   socket.on('stopped typing', data => {
