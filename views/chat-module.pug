@@ -9,6 +9,9 @@ button.chat-bubble#chat-bubble
 
   .chat-body
     ul.messages
+      if message
+        li.theirs.entry
+          p!= message
 
   form(action='' id=id ? 'my-admin-form' : 'my-form' method='POST')
     input(name='message' autocomplete='off' id='message' aria-label='Enter message.' placeholder='Message…' required)

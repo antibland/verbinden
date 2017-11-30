@@ -39,7 +39,8 @@ app.use('/', index);
 
 app.get('/chat', function(req, res) {
   const id = req.query.id;
-  res.render('chat', { title: 'Site chat', id });
+  const message = req.query.message || '';
+  res.render('chat', { title: 'Site chat', id, message });
 });
 
 // catch 404 and forward to error handler
@@ -106,7 +107,7 @@ io.on('connection', function(socket) {
           subject: 'Chat started from website!',
           html:    `<h2>${data.message}<h2>
                     <br><br>
-                    <a href="${app.locals.uri}/chat?id=${data.id}">Join the chat</a>`
+                    <a href="${app.locals.uri}/chat?id=${data.id}&message=${data.message}">Join the chat</a>`
         });
 
       send({}, function (err, res) {

@@ -68,10 +68,12 @@ socket.on('connect', function() {
 });
 
 socket.on('disconnect', function() {
-  document.body.classList.remove('typing');
-  document.body.classList.add('disconnect');
-  utils.addToList('system', 'Chat disconnected');
-  utils.blurInput();
+  if (!document.body.classList.contains('disconnect')) {
+    document.body.classList.remove('typing');
+    document.body.classList.add('disconnect');
+    utils.addToList('system', 'Chat disconnected');
+    utils.blurInput();
+  }
 });
 
 socket.on('chat message', function(message) {
