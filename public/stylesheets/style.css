@@ -343,3 +343,8 @@ footer {
     padding-right: 10px;
   }
 }
+
+/* overrides */
+.github-fork-ribbon::before {
+  background-color: #c62641 !important;
+}
