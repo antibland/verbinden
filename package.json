@@ -6,7 +6,8 @@
   },
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "pretest": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -20,5 +21,8 @@
     "serve-favicon": "~2.4.5",
     "socket.io": "^2.0.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^4.12.1",
+    "eslint-config-strongloop": "^2.1.0"
+  }
 }
