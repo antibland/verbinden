@@ -1,23 +1,28 @@
-"use strict"
+'use strict';
 
 var form = document.getElementById('my-form');
 var admin_form = document.getElementById('my-admin-form');
 var id_from_params;
-var uri = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
-var socket = io(uri);
+var uri =
+location.protocol +
+'//' +
+location.hostname +
+(location.port ? ':' + location.port : '');
+var socket = window.io(uri);
 var session_id;
-var admin_session_id;
 var list = document.getElementsByClassName('messages')[0];
 var typing_timeout;
 
-if ("URLSearchParams" in window) {
+if ('URLSearchParams' in window) {
   id_from_params = new URLSearchParams(window.location.search).get('id');
 } else {
   window.URLSearchParams = function(name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
     var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
     var results = regex.exec(location.search);
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    return results === null
+      ? ''
+      : decodeURIComponent(results[1].replace(/\+/g, ' '));
   };
 
   id_from_params = window.URLSearchParams('id');
@@ -49,22 +54,25 @@ var utils = {
 
   createMessageOptions: function createMessageOptions() {
     var message = utils.getMessage();
-    return admin_form ? { message: message,
-                          user_id: id_from_params,
-                          admin_id: session_id }
-                      : {
-                          message: message,
-                          id: session_id
-                        };
-  }
+    return admin_form
+      ? {
+        message: message,
+        user_id: id_from_params,
+        admin_id: session_id,
+      }
+      : {
+        message: message,
+        id: session_id,
+      };
+  },
 };
 
 // message related data
-var message_form = admin_form ? admin_form : form;
+var message_form = admin_form || form;
 var message_type = admin_form ? 'admin message' : 'chat message';
 
 socket.on('connect', function() {
-  session_id = socket.id
+  session_id = socket.id;
 });
 
 socket.on('disconnect', function() {
@@ -95,7 +103,7 @@ socket.on('play notification', function() {
 document.getElementById('message').addEventListener('keydown', function(e) {
   clearTimeout(typing_timeout);
   var user_type = admin_form ? 'admin' : 'client';
-  var data = { user_type: user_type };
+  var data = {user_type: user_type};
 
   if (user_type === 'admin') {
     data['user_id'] = id_from_params;
@@ -120,12 +128,13 @@ message_form.addEventListener('submit', function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-  document
-  .getElementById('chat-bubble')
-  .addEventListener('click', function() {
+  document.getElementById('chat-bubble').addEventListener('click', function() {
     this.classList.toggle('active');
 
-    if (this.classList.contains('active') && !document.body.classList.contains('disconnect')) {
+    if (
+      this.classList.contains('active') &&
+      !document.body.classList.contains('disconnect')
+    ) {
       document.getElementById('message').focus();
     }
   });
@@ -134,4 +143,4 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('chat-bubble').classList.add('active');
     document.getElementById('message').focus();
   }
-})
+});

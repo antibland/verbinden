@@ -1,6 +1,8 @@
+'use strict';
+
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
+// var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -12,7 +14,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 if (app.get('env') === 'development') {
-  require('dotenv').config()
+  require('dotenv').config();
 }
 
 // view engine setup
@@ -20,16 +22,16 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
   res.io = io;
   next();
 });
 
 app.use(logger('dev'));
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.use(cookieParser());
@@ -40,7 +42,7 @@ app.use('/', index);
 app.get('/chat', function(req, res) {
   const id = req.query.id;
   const message = req.query.message || '';
-  res.render('chat', { title: 'Site chat', id, message });
+  res.render('chat', {title: 'Site chat', id, message});
 });
 
 // catch 404 and forward to error handler
@@ -69,7 +71,10 @@ app.locals.site_owner = process.env.SITE_OWNER;
 io.on('connection', function(socket) {
   io.clients((error, clients) => {
     if (error) throw error;
-    //console.log('total connected', clients.length, '\ncurrent clients', clients);
+    /*
+    console.log(`total connected: ${clients.length}
+    current clients: ${clients}`);
+   */
   });
 
   socket.on('stopped typing', data => {
@@ -101,18 +106,24 @@ io.on('connection', function(socket) {
       app.locals.chat_hash[data.id] = '';
 
       var send = require('gmail-send')({
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-          to:   process.env.EMAIL_USER,
-          subject: 'Chat started from website!',
-          html:    `<h2>${data.message}<h2>
-                    <br><br>
-                    <a href="${app.locals.uri}/chat?id=${data.id}&message=${data.message}">Join the chat</a>`
-        });
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+        to: process.env.EMAIL_USER,
+        subject: 'Chat started from website!',
+        html: `<h2>${data.message}<h2><br><br>
+        <a href="${app.locals.uri}/chat?id=${data.id}&message=${data.message}">
+        Join the chat
+        </a>`,
+      });
 
-      send({}, function (err, res) {
-        if (err) throw error;
-        io.to(data.id).emit('chat message', 'Thanks for reaching out. I\'ll respond to you shortly.');
+      send({}, function(err, res) {
+        if (err) throw err;
+        io
+          .to(data.id)
+          .emit(
+            'chat message',
+            "Thanks for reaching out. I'll respond to you shortly."
+          );
       });
     } else {
       io.to(app.locals.chat_hash[data.id]).emit('chat message', data.message);
