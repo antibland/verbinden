@@ -1,3 +1,7 @@
+:root {
+  --red: #dd0000;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font: 13px Helvetica, Arial; display: flex; flex-direction: column; min-height: 100vh;}
 form { background: #000; }
@@ -8,17 +12,22 @@ form input {
   outline: none;
   font-size: 120%;
   transition: 0.5s background-color;
-  background-color: #c62641;
+  background-color: var(--red);
   border-top: 1px solid rgba(166, 166, 166, .3);
 }
 
 form input:focus,
 form input:valid {
   background-color: white;
+  border-color: rgba(177, 177, 177, .9);
 }
 
 input::placeholder {
-  color: rgba(211, 211, 211, 0.8);
+  color: white;
+}
+
+input:focus::placeholder {
+  color: black;
 }
 
 .svg-symbols {
@@ -46,7 +55,7 @@ h1, h2, h3, .menu li {
 }
 
 body > header {
-  background-color: #c62641;
+  background-color: var(--red);
   color: white;
   width: 100%;
   padding-bottom: 10em;
@@ -171,7 +180,7 @@ footer {
 
 .typing .chat-module header::after {
   content: '';
-  background-color: #c62641;
+  background-color: var(--red);
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -255,7 +264,7 @@ footer {
 }
 
 .entry.system p {
-  background: #c62641;
+  background: var(--red);
   width: 100%;
   max-width: 100%;
   margin: 1em 0 0;
@@ -346,5 +355,5 @@ footer {
 
 /* overrides */
 .github-fork-ribbon::before {
-  background-color: #c62641 !important;
+  background-color: var(--red) !important;
 }
