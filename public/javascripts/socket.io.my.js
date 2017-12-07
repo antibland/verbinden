@@ -11,6 +11,7 @@ location.hostname +
 var socket = window.io(uri);
 var session_id;
 var list = document.getElementsByClassName('messages')[0];
+var chat_body = document.getElementsByClassName('chat-body')[0];
 var typing_timeout;
 
 if ('URLSearchParams' in window) {
@@ -50,6 +51,7 @@ var utils = {
     item.classList.add('entry');
     item.appendChild(txt_wrap);
     list.appendChild(item);
+    chat_body.scrollTop = chat_body.scrollHeight - chat_body.clientHeight;
   },
 
   createMessageOptions: function createMessageOptions() {
